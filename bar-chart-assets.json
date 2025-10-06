@@ -1,0 +1,77 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 900,
+  "height": 450,
+  "title": {
+    "text": "Value of Fixed Assets by State (% of Total) with Year Filter",
+    "fontSize": 16,
+    "anchor": "start"
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/Principal%20Statistics%20of%20Transportation%20and%20Storage%20Services%20by%20State%20dataset.csv"
+  },
+  "params": [
+    {
+      "name": "year_selection",
+      "value": 2015,
+      "bind": {
+        "input": "select",
+        "options": [2010, 2014, 2015, 2017],
+        "name": "Year: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.Year == year_selection"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "Value of fixed assets",
+          "as": "total_fixed_assets"
+        }
+      ],
+      "groupby": ["Year"]
+    },
+    {
+      "calculate": "datum['Value of fixed assets'] / datum.total_fixed_assets * 100",
+      "as": "percentage"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "tooltip": true
+  },
+  "encoding": {
+    "x": {
+      "field": "State",
+      "type": "nominal",
+      "axis": {"title": "State", "labelAngle": -45},
+      "sort": "-y"
+    },
+    "y": {
+      "field": "percentage",
+      "type": "quantitative",
+      "axis": {"title": "Percentage of Total Value of Fixed Assets (%)"},
+      "format": ".1f"
+    },
+    "color": {
+      "field": "State",
+      "type": "nominal",
+      "legend": null,
+      "scale": {"scheme": "category20"}
+    },
+    "tooltip": [
+      {"field": "State", "type": "nominal", "title": "State"},
+      {"field": "Year", "type": "ordinal", "title": "Year"},
+      {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".2f"},
+      {"field": "Value of fixed assets", "type": "quantitative", "title": "Value of Fixed Assets", "format": ","}
+    ]
+  },
+  "config": {
+    "axis": {"labelFontSize": 12, "titleFontSize": 14},
+    "header": {"labelFontSize": 14, "titleFontSize": 16}
+  }
+}
