@@ -1,0 +1,205 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 500,
+  "title": {
+    "text": "Malaysia's Transport & Storage Sector: A Tale of Two Halves",
+    "subtitle": [
+      "Size of circles = Number of Establishments",
+      "Color saturation = Total number of persons engaged",
+      "Data Source: Department of Statistics Malaysia"
+    ],
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "anchor": "start"
+  },
+  "projection": {
+    "type": "equalEarth",
+    "center": [110, 4],
+    "scale": 2500,
+    "translate": [420, 250]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/my_state.json",
+        "format": {"type": "topojson", "feature": "my"}
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "lightgray",
+        "stroke": "white",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/Principal%20Statistics%20of%20Transportation%20and%20Storage%20Services%20by%20State%20dataset.csv"
+      },
+      "transform": [
+        {
+          "aggregate": [
+            {"op": "sum", "field": "Number of establishments", "as": "Total Establishments"},
+            {"op": "sum", "field": "Total number of persons engaged", "as": "Total Persons 2017"}
+          ],
+          "groupby": ["State"]
+        },
+        {
+          "lookup": "State",
+          "from": {
+            "data": {
+              "values": [
+                {"State": "Johor", "lon": 103.5, "lat": 1.8},
+                {"State": "Kedah", "lon": 100.4, "lat": 6.1},
+                {"State": "Kelantan", "lon": 102.3, "lat": 6},
+                {"State": "Melaka", "lon": 102.3, "lat": 2.2},
+                {"State": "Negeri Sembilan", "lon": 102, "lat": 2.7},
+                {"State": "Pahang", "lon": 102.5, "lat": 3.8},
+                {"State": "Penang", "lon": 100.3, "lat": 5.4},
+                {"State": "Perak", "lon": 101, "lat": 4.8},
+                {"State": "Perlis", "lon": 100.3, "lat": 6.6},
+                {"State": "Sabah", "lon": 116.5, "lat": 5.5},
+                {"State": "Sarawak", "lon": 113, "lat": 2},
+                {"State": "Selangor", "lon": 101.5, "lat": 3.1},
+                {"State": "Terengganu", "lon": 103.1, "lat": 5.2},
+                {"State": "Kuala Lumpur", "lon": 101.7, "lat": 3.1},
+                {"State": "Labuan", "lon": 115.2, "lat": 5.3},
+                {"State": "Putrajaya", "lon": 101.7, "lat": 2.9}
+              ]
+            },
+            "key": "State",
+            "fields": ["lon", "lat"]
+          }
+        },
+        {
+          "calculate": "datum.State == 'Selangor' || datum.State == 'Kuala Lumpur' || datum.State == 'Johor' || datum.State == 'Penang' ? 'Key Economic Hubs' : 'Other States'",
+          "as": "Region Type"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.8,
+        "stroke": "black",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "longitude": {"field": "lon", "type": "quantitative"},
+        "latitude": {"field": "lat", "type": "quantitative"},
+        "size": {
+          "field": "Total Establishments",
+          "type": "quantitative",
+          "title": "Establishments",
+          "scale": {"type": "sqrt", "range": [50, 3000]},
+          "legend": {
+            "orient": "right",
+            "title": "Establishments",
+            "symbolType": "circle",
+            "values": [1000, 5000, 10000, 18000],
+            "labelExpr": "format(datum.value, ',d')"
+          }
+        },
+        "color": {
+          "field": "Total Persons 2017",
+          "type": "quantitative",
+          "title": "Persons Engaged (×100k)",
+          "scale": {
+            "type": "threshold",
+            "domain": [100000, 200000, 600000],
+            "range": ["#c6dbef", "#6baed6", "#2171b5", "#08306b"]
+          },
+          "legend": {
+            "orient": "right",
+            "title": "Persons Engaged (×100k)",
+            "titleFontSize": 12,
+            "titlePadding": 20,
+            "labelFontSize": 10,
+            "values": [0,100000, 200000, 600000],
+            "labelExpr": "format(datum.value/100000, '.0f')"
+          }
+        },
+        "tooltip": [
+          {"field": "State", "title": "State"},
+          {"field": "Total Establishments", "title": "Establishments", "format": ","},
+          {"field": "Total Persons 2017", "title": "Persons Engaged", "format": ","}
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"state": "Selangor", "lon": 101.5, "lat": 3.1},
+          {"state": "Kuala Lumpur", "lon": 101.7, "lat": 3.4},
+          {"state": "Johor", "lon": 103.5, "lat": 1.5},
+          {"state": "Penang", "lon": 100.3, "lat": 5.7},
+          {"state": "Sabah", "lon": 116.5, "lat": 6},
+          {"state": "Sarawak", "lon": 113, "lat": 1.5}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "dy": -10,
+        "fontWeight": "bold",
+        "color": "black"
+      },
+      "encoding": {
+        "longitude": {"field": "lon"},
+        "latitude": {"field": "lat"},
+        "text": {"field": "state"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "label": "Selangor: Key Transport Hub",
+            "x": 105,
+            "y": 4,
+            "x2": 101.5,
+            "y2": 3.1
+          },
+          {
+            "label": "Johor: Major Gateway",
+            "x": 104.8,
+            "y": 1.2,
+            "x2": 103.5,
+            "y2": 1.8
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "color": "black",
+            "strokeWidth": 1,
+            "cornerRadius": 4
+          },
+          "encoding": {
+            "longitude": {"field": "x"},
+            "latitude": {"field": "y"},
+            "longitude2": {"field": "x2"},
+            "latitude2": {"field": "y2"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 5,
+            "dy": -5,
+            "fontSize": 11,
+            "color": "black",
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "longitude": {"field": "x"},
+            "latitude": {"field": "y"},
+            "text": {"field": "label"}
+          }
+        }
+      ]
+    }
+  ],
+  "config": {"view": {"stroke": "none"}}
+}
