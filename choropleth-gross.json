@@ -1,0 +1,168 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "vconcat": [
+    {
+      "width": 800,
+      "height": 400,
+      "title": {
+        "text": "Gross Output Normalized per km² by State",
+        "fontSize": 18,
+        "font": "Arial"
+      },
+      "projection": {
+        "type": "equalEarth",
+        "center": [110, 4],
+        "scale": 2500,
+        "translate": [400, 200]
+      },
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/my_state.json",
+            "format": {"type": "topojson", "feature": "my"}
+          },
+          "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1.5},
+          "encoding": {
+            "color": {
+              "field": "GrossOutput_perKm2",
+              "type": "quantitative",
+              "title": "Gross Output (RM per km²)",
+              "scale": {
+                "type": "threshold",
+                "domain": [100, 500, 1000, 3000, 8000],
+                "range": ["#fee5d9", "#fcae91", "#fb6a4a", "#de2d26", "#a50f15"]
+              },
+              "legend": {
+                "title": "Gross Output (RM/km²)",
+                "orient": "right",
+                "labelFormat": ","
+              }
+            },
+            "tooltip": [
+              {"field": "properties.name", "title": "State"},
+              {"field": "Value of gross output", "title": "Gross Output (RM)", "format": ","},
+              {"field": "Area_km2", "title": "Area (km²)", "format": ","},
+              {"field": "GrossOutput_perKm2", "title": "Gross Output per km² (RM)", "format": ","}
+            ]
+          },
+          "transform": [
+            {
+              "lookup": "properties.name",
+              "from": {
+                "data": {
+                  "values": [
+                    {"State": "Johor", "Area_km2": 19166},
+                    {"State": "Kedah", "Area_km2": 9426},
+                    {"State": "Kelantan", "Area_km2": 15099},
+                    {"State": "Melaka", "Area_km2": 1664},
+                    {"State": "Negeri Sembilan", "Area_km2": 6686},
+                    {"State": "Pahang", "Area_km2": 36137},
+                    {"State": "Perak", "Area_km2": 21035},
+                    {"State": "Perlis", "Area_km2": 821},
+                    {"State": "Pulau Pinang", "Area_km2": 1048},
+                    {"State": "Sabah", "Area_km2": 73904},
+                    {"State": "Sarawak", "Area_km2": 124450},
+                    {"State": "Selangor", "Area_km2": 8104},
+                    {"State": "Terengganu", "Area_km2": 13035},
+                    {"State": "Kuala Lumpur", "Area_km2": 243},
+                    {"State": "Labuan", "Area_km2": 92},
+                    {"State": "Putrajaya", "Area_km2": 49}
+                  ]
+                },
+                "key": "State",
+                "fields": ["Area_km2"]
+              }
+            },
+            {
+              "lookup": "properties.name",
+              "from": {
+                "data": {
+                  "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/Principal%20Statistics%20of%20Transportation%20and%20Storage%20Services%20by%20State%20dataset.csv"
+                },
+                "key": "State",
+                "fields": ["Value of gross output"]
+              }
+            },
+            {
+              "calculate": "datum['Value of gross output'] / datum['Area_km2']",
+              "as": "GrossOutput_perKm2"
+            }
+          ]
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "label": "Selangor: Key Transport Hub",
+                "x": 105,
+                "y": 4,
+                "x2": 101.5,
+                "y2": 3.1
+              },
+              {
+                "label": "Johor: Major Gateway",
+                "x": 104.8,
+                "y": 1.2,
+                "x2": 103.5,
+                "y2": 1.8
+              },
+              {
+                "label": "Sabah: Gateway to Borneo",
+                "x": 115,
+                "y": 7,
+                "x2": 116,
+                "y2": 5
+              },
+              {
+                "label": "Sarawak: Resource Hub",
+                "x": 113,
+                "y": 1,
+                "x2": 112,
+                "y2": 2
+              },
+              {
+                "label": "Pulau Pinang: Trade & Tourism Hub",
+                "x": 100.5,
+                "y": 5.5,
+                "x2": 100.3,
+                "y2": 5.4
+              }
+            ]
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "rule",
+                "color": "black",
+                "strokeWidth": 1,
+                "cornerRadius": 4
+              },
+              "encoding": {
+                "longitude": {"field": "x"},
+                "latitude": {"field": "y"},
+                "longitude2": {"field": "x2"},
+                "latitude2": {"field": "y2"}
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "dx": 5,
+                "dy": -5,
+                "fontSize": 11,
+                "color": "black",
+                "fontWeight": "bold"
+              },
+              "encoding": {
+                "longitude": {"field": "x"},
+                "latitude": {"field": "y"},
+                "text": {"field": "label"}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
