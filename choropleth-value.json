@@ -1,0 +1,128 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 400,
+  "title": {
+    "text": "Value Added by State (Color scaled per RM100,000)",
+    "fontSize": 18,
+    "font": "Arial"
+  },
+  "projection": {
+    "type": "equalEarth",
+    "center": [110, 4],
+    "scale": 2500,
+    "translate": [400, 200]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/my_state.json",
+        "format": {"type": "topojson", "feature": "my"}
+      },
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1.5},
+      "encoding": {
+        "color": {
+          "field": "ValueAdded_per100k",
+          "type": "quantitative",
+          "title": "Value Added (per RM100k, color only)",
+          "scale": {
+            "type": "threshold",
+            "domain": [5, 20, 100, 300, 700],
+            "range": ["#f7fcf0", "#ccebc5", "#7bccc4", "#2b8cbe", "#084081"]
+          },
+          "legend": {
+            "title": "Value Added (per RM100k)",
+            "orient": "right",
+            "labelFormat": ","
+          }
+        },
+        "tooltip": [
+          {"field": "properties.name", "title": "State"},
+          {"field": "Value added", "title": "Value Added (RM)", "format": ","}
+        ]
+      },
+      "transform": [
+        {
+          "lookup": "properties.name",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/Principal%20Statistics%20of%20Transportation%20and%20Storage%20Services%20by%20State%20dataset.csv"
+            },
+            "key": "State",
+            "fields": ["Value added"]
+          }
+        },
+        {
+          "calculate": "datum['Value added'] / 100000",
+          "as": "ValueAdded_per100k"
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "label": "Selangor: Key Transport Hub",
+            "x": 105,
+            "y": 4,
+            "x2": 101.5,
+            "y2": 3.1
+          },
+          {
+            "label": "Johor: Major Gateway",
+            "x": 104.8,
+            "y": 1.2,
+            "x2": 103.5,
+            "y2": 1.8
+          },
+          {
+            "label": "Sarawak: Resource Hub",
+            "x": 113,
+            "y": 1,
+            "x2": 112,
+            "y2": 2
+          },
+          {
+            "label": "Pulau Pinang: Trade & Tourism Hub",
+            "x": 100.5,
+            "y": 5.5,
+            "x2": 100.3,
+            "y2": 5.4
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "color": "black",
+            "strokeWidth": 1,
+            "cornerRadius": 4
+          },
+          "encoding": {
+            "longitude": {"field": "x"},
+            "latitude": {"field": "y"},
+            "longitude2": {"field": "x2"},
+            "latitude2": {"field": "y2"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 5,
+            "dy": -5,
+            "fontSize": 11,
+            "color": "black",
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "longitude": {"field": "x"},
+            "latitude": {"field": "y"},
+            "text": {"field": "label"}
+          }
+        }
+      ]
+    }
+  ]
+}
