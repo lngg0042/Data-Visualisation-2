@@ -3,8 +3,8 @@
   "width": 800,
   "height": 400,
   "title": {
-    "text": "Value Added by State (Color scaled per RM100,000)",
-    "fontSize": 18,
+    "text": "Value Added by State",
+    "fontSize": 20,
     "font": "Arial"
   },
   "projection": {
@@ -14,6 +14,14 @@
     "translate": [400, 200]
   },
   "layer": [
+    {
+      "mark": {"type": "rect", "fill": null, "stroke": "black", "strokeWidth": 2},
+      "encoding": {"x": {"value": 0}, "y": {"value": 0}, "x2": {"value": 800}, "y2": {"value": 450}}
+    },
+    {
+      "data": {"graticule": {"step": [10, 10]}},
+      "mark": {"type": "geoshape", "stroke": "lightgray", "strokeWidth": 1}
+    },
     {
       "data": {
         "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/my_state.json",
@@ -33,7 +41,11 @@
           "legend": {
             "title": "Value Added (per RM100k)",
             "orient": "right",
-            "labelFormat": ","
+            "labelFontSize": 12,
+            "titleFontSize": 13,
+            "symbolSize": 100,
+            "labelFont": "Arial",
+            "titleFont": "Arial"
           }
         },
         "tooltip": [
@@ -62,28 +74,28 @@
       "data": {
         "values": [
           {
-            "label": "Selangor: Key Transport Hub",
+            "label": "Selangor: ASEAN Gateway & Transport Hub",
             "x": 105,
             "y": 4,
             "x2": 101.5,
             "y2": 3.1
           },
           {
-            "label": "Johor: Major Gateway",
+            "label": "Johor: Strategic Gateway & Manufacturing Hub",
             "x": 104.8,
             "y": 1.2,
             "x2": 103.5,
             "y2": 1.8
           },
           {
-            "label": "Sarawak: Resource Hub",
+            "label": "Sarawak: Resource & Energy Export Hub",
             "x": 113,
             "y": 1,
             "x2": 112,
             "y2": 2
           },
           {
-            "label": "Pulau Pinang: Trade & Tourism Hub",
+            "label": "Pulau Pinang: Trade & Technology Hub",
             "x": 100.5,
             "y": 5.5,
             "x2": 100.3,
@@ -120,6 +132,7 @@
             "longitude": {"field": "x"},
             "latitude": {"field": "y"},
             "text": {"field": "label"}
+            
           }
         }
       ]
