@@ -41,7 +41,8 @@
       "bind": {
         "input": "select",
         "options": ["index", "total"],
-        "labels": ["Employment Index", "Total Persons Engaged"]
+        "labels": ["Employment Index", "Total Persons Engaged"],
+        "name": "Select Metric Type: "
       }
     }
   ],
@@ -58,8 +59,37 @@
         {
           "mark": {"type": "point", "filled": true, "color": "#d62728", "size": 80},
           "encoding": {
-            "x": {"field": "YearTrimmed", "type": "ordinal"},
-            "y": {"field": "Employment Index", "type": "quantitative"},
+           "x": {
+              "field": "YearTrimmed",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {
+                "labelAngle": 0,
+                "labelFontSize": 12,
+                "titleFontSize": 14,
+                "labelFont": "Arial",
+                "titleFont": "Arial",
+                "labelColor": "black",
+                "titleColor": "black"
+              }
+            },
+            "y": {
+              "field": "Employment Index",
+              "type": "quantitative",
+              "title": "Employment Index (2010 = 100)",
+              "scale": {"zero": false},
+              "axis": {
+                "labelFontSize": 12,
+                "titleFontSize": 14,
+                "labelFont": "Arial",
+                "titleFont": "Arial",
+                "labelColor": "black",
+                "titleColor": "black",
+                "grid": true,
+                "gridColor": "#e0e0e0",
+                "tickSize": 5
+              }
+            },
             "tooltip": [
               {"field": "YearTrimmed", "type": "ordinal"},
               {"field": "Total Persons Engaged", "type": "quantitative", "format": ","},
