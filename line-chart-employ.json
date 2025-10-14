@@ -117,7 +117,7 @@
             "y": {
               "field": "Total Persons Engaged",
               "type": "quantitative",
-              "title": "Total Persons Engaged (Thousands)",
+              "title": "Total Persons Engaged ('000)",
               "axis": {"format": "s", "labelAngle": 0}
             }
           }
@@ -146,3 +146,4 @@
     }
   ]
 }
+
