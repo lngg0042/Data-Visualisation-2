@@ -3,9 +3,10 @@
   "width": 900,
   "height": 450,
   "title": {
-    "text": "Value of Fixed Assets by State (% of Total) with Year Filter",
-    "fontSize": 16,
-    "anchor": "start"
+    "text": "Value of Fixed Assets by State (% of Total)",
+    "fontSize": 20,
+    "anchor": "middle",
+    "subtitle": "Selangor & KL consistently dominate, smaller eastern states contribute less than 2%"
   },
   "data": {
     "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/Principal%20Statistics%20of%20Transportation%20and%20Storage%20Services%20by%20State%20dataset.csv"
@@ -22,16 +23,10 @@
     }
   ],
   "transform": [
-    {
-      "filter": "datum.Year == year_selection"
-    },
+    {"filter": "datum.Year == year_selection"},
     {
       "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "Value of fixed assets",
-          "as": "total_fixed_assets"
-        }
+        {"op": "sum", "field": "Value of fixed assets", "as": "total_fixed_assets"}
       ],
       "groupby": ["Year"]
     },
@@ -40,36 +35,74 @@
       "as": "percentage"
     }
   ],
-  "mark": {
-    "type": "bar",
-    "tooltip": true
-  },
-  "encoding": {
-    "x": {
-      "field": "State",
-      "type": "nominal",
-      "axis": {"title": "State", "labelAngle": -45},
-      "sort": "-y"
+  "layer": [
+    {
+      "mark": {"type": "bar", "tooltip": true},
+      "encoding": {
+        "x": {
+          "field": "State",
+          "type": "nominal",
+          "axis": {"title": "State", "labelAngle": -45},
+          "sort": "-y"
+        },
+        "y": {
+          "field": "percentage",
+          "type": "quantitative",
+          "axis": {"title": "Percentage of Total Value of Fixed Assets (%)"},
+          "format": ".1f"
+        },
+        "color": {
+          "field": "State",
+          "type": "nominal",
+          "legend": null,
+          "scale": {"scheme": "category20"}
+        },
+        "tooltip": [
+          {"field": "State", "type": "nominal", "title": "State"},
+          {"field": "Year", "type": "ordinal", "title": "Year"},
+          {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".2f"},
+          {"field": "Value of fixed assets", "type": "quantitative", "title": "Value of Fixed Assets", "format": ","}
+        ]
+      }
     },
-    "y": {
-      "field": "percentage",
-      "type": "quantitative",
-      "axis": {"title": "Percentage of Total Value of Fixed Assets (%)"},
-      "format": ".1f"
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -3,
+        "fontSize": 11
+      },
+      "encoding": {
+        "x": {"field": "State", "type": "nominal"},
+        "y": {"field": "percentage", "type": "quantitative"},
+        "text": {"field": "percentage", "type": "quantitative", "format": ".1f"}
+      }
     },
-    "color": {
-      "field": "State",
-      "type": "nominal",
-      "legend": null,
-      "scale": {"scheme": "category20"}
-    },
-    "tooltip": [
-      {"field": "State", "type": "nominal", "title": "State"},
-      {"field": "Year", "type": "ordinal", "title": "Year"},
-      {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".2f"},
-      {"field": "Value of fixed assets", "type": "quantitative", "title": "Value of Fixed Assets", "format": ","}
-    ]
-  },
+    {
+      "transform": [
+        {
+          "aggregate": [{"op": "mean", "field": "percentage", "as": "avg_percentage"}]
+        },
+        {
+          "calculate": "'National Avg: ' + format(datum.avg_percentage, '.1f') + '%'",
+          "as": "avg_label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "dy": -5,
+        "fontSize": 12,
+        "color": "black"
+      },
+      "encoding": {
+        "y": {"aggregate": "mean", "field": "percentage"},
+        "text": {"field": "avg_label"}
+      }
+    }
+  ],
   "config": {
     "axis": {"labelFontSize": 12, "titleFontSize": 14},
     "header": {"labelFontSize": 14, "titleFontSize": 16}
