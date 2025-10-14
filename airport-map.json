@@ -29,8 +29,9 @@
           "transform": [
             {"filter": "datum.name != 'name'"},
             {"filter": "datum.type != '#loc +airport +type'"},
+            {"filter": "datum.type != 'heliport'"},
             {
-              "calculate": "datum.type == 'large_airport' ? 'Large Airport' : datum.type == 'medium_airport' ? 'Medium Airport' : datum.type == 'small_airport' ? 'Small Airport' : datum.type == 'heliport' ? 'Heliport' : datum.type == 'closed' ? 'Closed' : datum.type",
+              "calculate": "datum.type == 'large_airport' ? 'Large Airport' : datum.type == 'medium_airport' ? 'Medium Airport' : datum.type == 'small_airport' ? 'Small Airport' : datum.type == 'closed' ? 'Closed' : datum.type",
               "as": "type_label"
             }
           ],
@@ -47,8 +48,18 @@
             "latitude": {"field": "latitude_deg", "type": "quantitative"},
             "size": {"value": 50},
             "color": {
-              "field": "type_label", "type": "nominal", "title": "Airport Type",
-              "legend": {"titleFontSize": 15, "labelFontSize": 12, "symbolSize": 100, "symbolStrokeWidth": 4}
+              "field": "type_label",
+              "type": "nominal",
+              "title": "Airport Type",
+              "scale": {
+                "range": ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
+              },
+              "legend": {
+                "titleFontSize": 15,
+                "labelFontSize": 13,
+                "symbolSize": 100,
+                "symbolStrokeWidth": 4
+              }
             },
             "opacity": {"condition": {"param": "airportType", "value": 1}, "value": 0.2},
             "tooltip": [
@@ -57,22 +68,6 @@
               {"field": "region_name", "title": "State"},
               {"field": "type_label", "title": "Type"}
             ]
-          }
-        },
-        {
-          "data": {
-            "values": [
-              {"state": "Johor", "lon": 103.5, "lat": 1.8},
-              {"state": "Penang", "lon": 100.3, "lat": 5.4},
-              {"state": "Sabah", "lon": 116.5, "lat": 5.5},
-              {"state": "Sarawak", "lon": 113.0, "lat": 2.0}
-            ]
-          },
-          "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "black", "dy": -5},
-          "encoding": {
-            "longitude": {"field": "lon"},
-            "latitude": {"field": "lat"},
-            "text": {"field": "state"}
           }
         },
         {
@@ -99,8 +94,9 @@
       "transform": [
         {"filter": "datum.name != 'name'"},
         {"filter": "datum.type != '#loc +airport +type'"},
+        {"filter": "datum.type != 'heliport'"},
         {
-          "calculate": "datum.type == 'large_airport' ? 'Large Airport' : datum.type == 'medium_airport' ? 'Medium Airport' : datum.type == 'small_airport' ? 'Small Airport' : datum.type == 'heliport' ? 'Heliport' : datum.type == 'closed' ? 'Closed' : datum.type",
+          "calculate": "datum.type == 'large_airport' ? 'Large Airport' : datum.type == 'medium_airport' ? 'Medium Airport' : datum.type == 'small_airport' ? 'Small Airport' : datum.type == 'closed' ? 'Closed' : datum.type",
           "as": "type_label"
         },
         {"filter": {"param": "airportType"}},
@@ -108,8 +104,36 @@
       ],
       "mark": {"type": "bar"},
       "encoding": {
-        "x": {"field": "region_name", "type": "ordinal", "title": "State", "sort": "-y", "axis": {"labelAngle": -45}},
-        "y": {"field": "Airport Count", "type": "quantitative", "title": "Number of Airports"},
+
+        "x": {
+          "field": "region_name", 
+          "type": "ordinal", 
+          "title": "State", 
+          "sort": "-y", 
+          "axis": {
+          "labelAngle": -45,  
+          "labelFontSize": 12,     
+          "titleFontSize": 14,    
+          "labelFont": "Arial",   
+          "titleFont": "Arial",    
+          "labelColor": "black",    
+          "titleColor": "black"
+        }
+      },
+
+        "y": {
+          "field": "Airport Count", 
+          "type": "quantitative", 
+          "title": "Number of Airports",
+          "axis": {
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "grid": true,             
+            "gridColor": "#e0e0e0",   
+            "tickSize": 5,            
+            "domain": true       
+          }
+        },
         "color": {"field": "type_label", "type": "nominal", "title": "Airport Type"},
         "tooltip": [
           {"field": "region_name", "title": "State"},
