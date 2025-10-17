@@ -5,22 +5,33 @@
       "width": 800,
       "height": 450,
       "title": {"text": "Airports in Malaysia", "fontSize": 20, "font": "Arial"},
-      "projection": {"type": "equalEarth", "center": [110, 4], "scale": 2500, "translate": [420, 225]},
+      "projection": {
+        "type": "conicEqualArea",
+        "center": [110, 4],
+        "parallels": [1, 0],
+        "scale": 2300,
+        "translate": [425, 225]
+      },
       "layer": [
         {
           "mark": {"type": "rect", "fill": null, "stroke": "black", "strokeWidth": 2},
           "encoding": {"x": {"value": 0}, "y": {"value": 0}, "x2": {"value": 800}, "y2": {"value": 450}}
         },
         {
-          "data": {"graticule": {"step": [10, 10]}},
-          "mark": {"type": "geoshape", "stroke": "lightgray", "strokeWidth": 1}
+          "data": {"graticule": {"step": [5, 5]}},
+          "mark": {
+            "type": "geoshape",
+            "stroke": "#cccccc",
+            "strokeWidth": 0.8,
+            "opacity": 0.8
+          }
         },
         {
           "data": {
             "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/my_state.json",
             "format": {"type": "topojson", "feature": "my"}
           },
-          "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+          "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "black", "strokeWidth": 0.5}
         },
         {
           "data": {
@@ -51,15 +62,8 @@
               "field": "type_label",
               "type": "nominal",
               "title": "Airport Type",
-              "scale": {
-                "range": ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
-              },
-              "legend": {
-                "titleFontSize": 15,
-                "labelFontSize": 13,
-                "symbolSize": 100,
-                "symbolStrokeWidth": 4
-              }
+              "scale": {"range": ["#E69F00", "#56B4E9", "#0072B2", "#CC79A7", "#8B4513", "#FF69B4", "#808080"]},
+              "legend": {"titleFontSize": 15, "labelFontSize": 13, "symbolSize": 100, "symbolStrokeWidth": 4}
             },
             "opacity": {"condition": {"param": "airportType", "value": 1}, "value": 0.2},
             "tooltip": [
@@ -104,34 +108,32 @@
       ],
       "mark": {"type": "bar"},
       "encoding": {
-
         "x": {
-          "field": "region_name", 
-          "type": "ordinal", 
-          "title": "State", 
-          "sort": "-y", 
+          "field": "region_name",
+          "type": "ordinal",
+          "title": "State",
+          "sort": "-y",
           "axis": {
-          "labelAngle": -45,  
-          "labelFontSize": 12,     
-          "titleFontSize": 14,    
-          "labelFont": "Arial",   
-          "titleFont": "Arial",    
-          "labelColor": "black",    
-          "titleColor": "black"
-        }
-      },
-
+            "labelAngle": -45,
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "labelFont": "Arial",
+            "titleFont": "Arial",
+            "labelColor": "black",
+            "titleColor": "black"
+          }
+        },
         "y": {
-          "field": "Airport Count", 
-          "type": "quantitative", 
+          "field": "Airport Count",
+          "type": "quantitative",
           "title": "Number of Airports",
           "axis": {
             "labelFontSize": 12,
             "titleFontSize": 14,
-            "grid": true,             
-            "gridColor": "#e0e0e0",   
-            "tickSize": 5,            
-            "domain": true       
+            "grid": true,
+            "gridColor": "#e0e0e0",
+            "tickSize": 5,
+            "domain": true
           }
         },
         "color": {"field": "type_label", "type": "nominal", "title": "Airport Type"},
