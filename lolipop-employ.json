@@ -1,0 +1,274 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 450,
+  "title": {
+    "text": "Yearly Employment Trend",
+    "fontSize": 20,
+    "font": "Arial",
+    "anchor": "middle"
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/Principal%20Statistics%20of%20Transportation%20and%20Storage%20Services%20by%20State%20dataset.csv"
+  },
+  "transform": [
+    {
+      "calculate": "trim(datum.Year)",
+      "as": "YearTrimmed"
+    },
+    {
+      "filter": "datum.YearTrimmed != null && datum.YearTrimmed != ''"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "Total number of persons engaged",
+          "as": "Total Persons Engaged"
+        }
+      ],
+      "groupby": ["YearTrimmed"]
+    },
+    {
+      "calculate": "(datum['Total Persons Engaged'] / 289715) * 100",
+      "as": "Employment Index"
+    }
+  ],
+  "params": [
+    {
+      "name": "chartType",
+      "value": "index",
+      "bind": {
+        "input": "select",
+        "options": ["index", "total"],
+        "labels": ["Employment Index", "Total Persons Engaged"],
+        "name": "Select Metric Type: "
+      }
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "tooltip": true,
+        "color": "#000000",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal",
+          "title": "Year",
+          "axis": {
+            "labelAngle": 0,
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "labelFont": "Arial",
+            "titleFont": "Arial"
+          }
+        },
+        "y": {
+          "field": "Employment Index",
+          "type": "quantitative",
+          "title": "Employment Index (2010 = 100)",
+          "scale": {"zero": true},
+          "axis": {
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "labelFont": "Arial",
+            "titleFont": "Arial",
+            "grid": true,
+            "gridColor": "#e0e0e0"
+          }
+        }
+      },
+      "transform": [{"filter": "chartType == 'index'"}]
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 100,
+        "tooltip": true,
+        "color": "#4c78a8"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Employment Index",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {"field": "YearTrimmed", "type": "ordinal", "title": "Year"},
+          {"field": "Total Persons Engaged", "type": "quantitative", "format": ",", "title": "Total Persons"},
+          {"field": "Employment Index", "type": "quantitative", "format": ".1f", "title": "Employment Index"}
+        ]
+      },
+      "transform": [{"filter": "chartType == 'index'"}]
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "tooltip": true,
+        "color": "#000000",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal",
+          "title": "Year",
+          "axis": {
+            "labelAngle": 0,
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "labelFont": "Arial",
+            "titleFont": "Arial"
+          }
+        },
+        "y": {
+          "field": "Total Persons Engaged",
+          "type": "quantitative",
+          "title": "Total Persons Engaged ('000)",
+          "scale": {"zero": true},
+          "axis": {
+            "format": "s",
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "labelFont": "Arial",
+            "titleFont": "Arial",
+            "grid": true,
+            "gridColor": "#e0e0e0"
+          }
+        }
+      },
+      "transform": [{"filter": "chartType == 'total'"}]
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 100,
+        "tooltip": true,
+        "color": "#4c78a8"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Total Persons Engaged",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {"field": "YearTrimmed", "type": "ordinal", "title": "Year"},
+          {"field": "Total Persons Engaged", "type": "quantitative", "format": ",", "title": "Total Persons"}
+        ]
+      },
+      "transform": [{"filter": "chartType == 'total'"}]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -8,
+        "fontSize": 10,
+        "font": "Arial",
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Employment Index",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Employment Index",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      },
+      "transform": [{"filter": "chartType == 'index'"}]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -8,
+        "fontSize": 10,
+        "font": "Arial",
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Total Persons Engaged",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Total Persons Engaged",
+          "type": "quantitative",
+          "format": ",.0f"
+        }
+      },
+      "transform": [{"filter": "chartType == 'total'"}]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "top",
+        "dy": 10,
+        "fontSize": 11,
+        "font": "Arial",
+        "fontWeight": "bold",
+        "fill": "#e45756"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearTrimmed",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Employment Index",
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "datum['Employment Index'] == 100",
+            "value": "Baseline Year"
+          },
+          "value": ""
+        }
+      },
+      "transform": [
+        {"filter": "chartType == 'index'"},
+        {"filter": "datum['Employment Index'] == 100"}
+      ]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "x": 10,
+        "y": 10,
+        "fontSize": 12,
+        "font": "Arial",
+        "fill": "#666666"
+      }
+    }
+  ]
+}
