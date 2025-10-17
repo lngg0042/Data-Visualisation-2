@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 900,
+  "width": 700,
   "height": 450,
   "title": {
     "text": "Value of Fixed Assets by State (% of Total)",
@@ -33,6 +33,14 @@
     {
       "calculate": "datum['Value of fixed assets'] / datum.total_fixed_assets * 100",
       "as": "percentage"
+    },
+    {
+      "window": [{"op": "rank", "field": "percentage", "as": "rank"}],
+      "sort": [{"field": "percentage", "order": "descending"}]
+    },
+    {
+      "calculate": "datum.rank <= 3 ? 'Top 3' : 'Other'",
+      "as": "highlight"
     }
   ],
   "layer": [
@@ -52,10 +60,10 @@
           "format": ".1f"
         },
         "color": {
-          "field": "State",
+          "field": "highlight",
           "type": "nominal",
-          "legend": null,
-          "scale": {"scheme": "category20"}
+          "scale": {"domain": ["Top 3", "Other"], "range": ["#00468b", "#a8dadc"]},
+          "legend": null
         },
         "tooltip": [
           {"field": "State", "type": "nominal", "title": "State"},
@@ -76,7 +84,11 @@
       "encoding": {
         "x": {"field": "State", "type": "nominal"},
         "y": {"field": "percentage", "type": "quantitative"},
-        "text": {"field": "percentage", "type": "quantitative", "format": ".1f"}
+        "text": {"field": "percentage", "type": "quantitative", "format": ".1f"},
+        "color": {
+          "condition": {"test": "datum.rank <= 3", "value": "#00468b"},
+          "value": "black"
+        }
       }
     },
     {
