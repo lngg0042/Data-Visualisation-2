@@ -8,26 +8,36 @@
     "font": "Arial"
   },
   "projection": {
-    "type": "equalEarth",
+    "type": "conicEqualArea",
     "center": [110, 4],
-    "scale": 2500,
-    "translate": [400, 200]
+    "parallels": [1, 0],
+    "scale": 2300,
+    "translate": [425, 200]
   },
   "layer": [
     {
       "mark": {"type": "rect", "fill": null, "stroke": "black", "strokeWidth": 2},
-      "encoding": {"x": {"value": 0}, "y": {"value": 0}, "x2": {"value": 800}, "y2": {"value": 450}}
+      "encoding": {
+        "x": {"value": 0},
+        "y": {"value": 0},
+        "x2": {"value": 800},
+        "y2": {"value": 450}
+      }
     },
     {
-      "data": {"graticule": {"step": [10, 10]}},
-      "mark": {"type": "geoshape", "stroke": "lightgray", "strokeWidth": 1}
+      "data": {"graticule": {"step": [5, 5]}},
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#cccccc",
+        "strokeWidth": 0.8
+      }
     },
     {
       "data": {
         "url": "https://raw.githubusercontent.com/lngg0042/Data-Visualisation-2/refs/heads/main/my_state.json",
         "format": {"type": "topojson", "feature": "my"}
       },
-      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1.5},
+      "mark": {"type": "geoshape", "stroke": "black", "strokeWidth": 0.5},
       "encoding": {
         "color": {
           "field": "ValueAdded_per100k",
@@ -97,7 +107,7 @@
           {
             "label": "Pulau Pinang: Trade & Technology Hub",
             "x": 100.5,
-            "y": 5.5,
+            "y": 6,
             "x2": 100.3,
             "y2": 5.4
           }
@@ -132,7 +142,6 @@
             "longitude": {"field": "x"},
             "latitude": {"field": "y"},
             "text": {"field": "label"}
-            
           }
         }
       ]
